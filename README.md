@@ -3,7 +3,7 @@
 
 The official Java SDK for scraping, crawling, searching, mapping, structured extraction, screenshots, and brand profiles.
 
-[Documentation](https://docs.berrycrawl.com) · [Dashboard](https://app.berrycrawl.com) · [GitHub](https://github.com/strawberry-labs/berrycrawl-java)
+[Documentation](https://docs.berrycrawl.com) · [Dashboard](https://berrycrawl.com/app) · [GitHub](https://github.com/strawberry-labs/berrycrawl-java)
 
 ## Table of Contents
 
@@ -26,7 +26,7 @@ A full reference for this library is available [here](./reference.md).
 
 ## Usage
 
-Set `BERRYCRAWL_API_KEY` to an API key from the [Berrycrawl dashboard](https://app.berrycrawl.com).
+Set `BERRYCRAWL_API_KEY` to an API key from the [Berrycrawl dashboard](https://berrycrawl.com/app).
 
 ```java
 import com.berrycrawl.Berrycrawl;
