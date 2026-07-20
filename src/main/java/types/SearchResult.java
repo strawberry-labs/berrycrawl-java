@@ -29,8 +29,6 @@ import org.jetbrains.annotations.NotNull;
     builder = SearchResult.Builder.class
 )
 public final class SearchResult {
-  private final Optional<SearchResultProvider> provider;
-
   private final Optional<String> publishedDate;
 
   private final String snippet;
@@ -43,21 +41,14 @@ public final class SearchResult {
 
   private final Map<String, Object> additionalProperties;
 
-  private SearchResult(Optional<SearchResultProvider> provider, Optional<String> publishedDate,
-      String snippet, String source, String title, String url,
-      Map<String, Object> additionalProperties) {
-    this.provider = provider;
+  private SearchResult(Optional<String> publishedDate, String snippet, String source, String title,
+      String url, Map<String, Object> additionalProperties) {
     this.publishedDate = publishedDate;
     this.snippet = snippet;
     this.source = source;
     this.title = title;
     this.url = url;
     this.additionalProperties = additionalProperties;
-  }
-
-  @JsonProperty("provider")
-  public Optional<SearchResultProvider> getProvider() {
-    return provider;
   }
 
   @JsonIgnore
@@ -109,12 +100,12 @@ public final class SearchResult {
   }
 
   private boolean equalTo(SearchResult other) {
-    return provider.equals(other.provider) && publishedDate.equals(other.publishedDate) && snippet.equals(other.snippet) && source.equals(other.source) && title.equals(other.title) && url.equals(other.url);
+    return publishedDate.equals(other.publishedDate) && snippet.equals(other.snippet) && source.equals(other.source) && title.equals(other.title) && url.equals(other.url);
   }
 
   @java.lang.Override
   public int hashCode() {
-    return Objects.hash(this.provider, this.publishedDate, this.snippet, this.source, this.title, this.url);
+    return Objects.hash(this.publishedDate, this.snippet, this.source, this.title, this.url);
   }
 
   @java.lang.Override
@@ -151,10 +142,6 @@ public final class SearchResult {
 
     _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
-    _FinalStage provider(Optional<SearchResultProvider> provider);
-
-    _FinalStage provider(SearchResultProvider provider);
-
     _FinalStage publishedDate(Optional<String> publishedDate);
 
     _FinalStage publishedDate(String publishedDate);
@@ -176,8 +163,6 @@ public final class SearchResult {
 
     private Optional<String> publishedDate = Optional.empty();
 
-    private Optional<SearchResultProvider> provider = Optional.empty();
-
     @JsonAnySetter
     private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -186,7 +171,6 @@ public final class SearchResult {
 
     @java.lang.Override
     public Builder from(SearchResult other) {
-      provider(other.getProvider());
       publishedDate(other.getPublishedDate());
       snippet(other.getSnippet());
       source(other.getSource());
@@ -254,24 +238,8 @@ public final class SearchResult {
     }
 
     @java.lang.Override
-    public _FinalStage provider(SearchResultProvider provider) {
-      this.provider = Optional.ofNullable(provider);
-      return this;
-    }
-
-    @java.lang.Override
-    @JsonSetter(
-        value = "provider",
-        nulls = Nulls.SKIP
-    )
-    public _FinalStage provider(Optional<SearchResultProvider> provider) {
-      this.provider = provider;
-      return this;
-    }
-
-    @java.lang.Override
     public SearchResult build() {
-      return new SearchResult(provider, publishedDate, snippet, source, title, url, additionalProperties);
+      return new SearchResult(publishedDate, snippet, source, title, url, additionalProperties);
     }
 
     @java.lang.Override
