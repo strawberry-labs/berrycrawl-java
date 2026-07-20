@@ -31,8 +31,6 @@ public final class SearchResponse {
 
   private final List<SearchResult> data;
 
-  private final SearchResponseProvider provider;
-
   private final String query;
 
   private final boolean success;
@@ -41,11 +39,10 @@ public final class SearchResponse {
 
   private final Map<String, Object> additionalProperties;
 
-  private SearchResponse(int creditsUsed, List<SearchResult> data, SearchResponseProvider provider,
-      String query, boolean success, int total, Map<String, Object> additionalProperties) {
+  private SearchResponse(int creditsUsed, List<SearchResult> data, String query, boolean success,
+      int total, Map<String, Object> additionalProperties) {
     this.creditsUsed = creditsUsed;
     this.data = data;
-    this.provider = provider;
     this.query = query;
     this.success = success;
     this.total = total;
@@ -60,11 +57,6 @@ public final class SearchResponse {
   @JsonProperty("data")
   public List<SearchResult> getData() {
     return data;
-  }
-
-  @JsonProperty("provider")
-  public SearchResponseProvider getProvider() {
-    return provider;
   }
 
   @JsonProperty("query")
@@ -94,12 +86,12 @@ public final class SearchResponse {
   }
 
   private boolean equalTo(SearchResponse other) {
-    return creditsUsed == other.creditsUsed && data.equals(other.data) && provider.equals(other.provider) && query.equals(other.query) && success == other.success && total == other.total;
+    return creditsUsed == other.creditsUsed && data.equals(other.data) && query.equals(other.query) && success == other.success && total == other.total;
   }
 
   @java.lang.Override
   public int hashCode() {
-    return Objects.hash(this.creditsUsed, this.data, this.provider, this.query, this.success, this.total);
+    return Objects.hash(this.creditsUsed, this.data, this.query, this.success, this.total);
   }
 
   @java.lang.Override
@@ -112,13 +104,9 @@ public final class SearchResponse {
   }
 
   public interface CreditsUsedStage {
-    ProviderStage creditsUsed(int creditsUsed);
+    QueryStage creditsUsed(int creditsUsed);
 
     Builder from(SearchResponse other);
-  }
-
-  public interface ProviderStage {
-    QueryStage provider(@NotNull SearchResponseProvider provider);
   }
 
   public interface QueryStage {
@@ -150,10 +138,8 @@ public final class SearchResponse {
   @JsonIgnoreProperties(
       ignoreUnknown = true
   )
-  public static final class Builder implements CreditsUsedStage, ProviderStage, QueryStage, SuccessStage, TotalStage, _FinalStage {
+  public static final class Builder implements CreditsUsedStage, QueryStage, SuccessStage, TotalStage, _FinalStage {
     private int creditsUsed;
-
-    private SearchResponseProvider provider;
 
     private String query;
 
@@ -173,7 +159,6 @@ public final class SearchResponse {
     public Builder from(SearchResponse other) {
       creditsUsed(other.getCreditsUsed());
       data(other.getData());
-      provider(other.getProvider());
       query(other.getQuery());
       success(other.getSuccess());
       total(other.getTotal());
@@ -182,15 +167,8 @@ public final class SearchResponse {
 
     @java.lang.Override
     @JsonSetter("creditsUsed")
-    public ProviderStage creditsUsed(int creditsUsed) {
+    public QueryStage creditsUsed(int creditsUsed) {
       this.creditsUsed = creditsUsed;
-      return this;
-    }
-
-    @java.lang.Override
-    @JsonSetter("provider")
-    public QueryStage provider(@NotNull SearchResponseProvider provider) {
-      this.provider = Objects.requireNonNull(provider, "provider must not be null");
       return this;
     }
 
@@ -244,7 +222,7 @@ public final class SearchResponse {
 
     @java.lang.Override
     public SearchResponse build() {
-      return new SearchResponse(creditsUsed, data, provider, query, success, total, additionalProperties);
+      return new SearchResponse(creditsUsed, data, query, success, total, additionalProperties);
     }
 
     @java.lang.Override

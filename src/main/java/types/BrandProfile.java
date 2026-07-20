@@ -4,9 +4,12 @@
 
 package com.berrycrawl.types;
 
+import com.berrycrawl.core.Nullable;
+import com.berrycrawl.core.NullableNonemptyFilter;
 import com.berrycrawl.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
     builder = BrandProfile.Builder.class
 )
 public final class BrandProfile {
+  private final Optional<BrandDesignSystem> branding;
+
   private final List<BrandProfileColorsItem> colors;
 
   private final Optional<String> description;
@@ -50,11 +55,12 @@ public final class BrandProfile {
 
   private final Map<String, Object> additionalProperties;
 
-  private BrandProfile(List<BrandProfileColorsItem> colors, Optional<String> description,
-      String domain, List<BrandProfileFontsItem> fonts, List<BrandAsset> images,
-      Optional<String> language, List<BrandAsset> logos, String name,
+  private BrandProfile(Optional<BrandDesignSystem> branding, List<BrandProfileColorsItem> colors,
+      Optional<String> description, String domain, List<BrandProfileFontsItem> fonts,
+      List<BrandAsset> images, Optional<String> language, List<BrandAsset> logos, String name,
       List<BrandProfileSocialsItem> socials, Optional<String> tagline,
       Map<String, Object> additionalProperties) {
+    this.branding = branding;
     this.colors = colors;
     this.description = description;
     this.domain = domain;
@@ -66,6 +72,11 @@ public final class BrandProfile {
     this.socials = socials;
     this.tagline = tagline;
     this.additionalProperties = additionalProperties;
+  }
+
+  @JsonProperty("branding")
+  public Optional<BrandDesignSystem> getBranding() {
+    return branding;
   }
 
   @JsonProperty("colors")
@@ -93,8 +104,11 @@ public final class BrandProfile {
     return images;
   }
 
-  @JsonProperty("language")
+  @JsonIgnore
   public Optional<String> getLanguage() {
+    if (language == null) {
+      return Optional.empty();
+    }
     return language;
   }
 
@@ -118,6 +132,15 @@ public final class BrandProfile {
     return tagline;
   }
 
+  @JsonInclude(
+      value = JsonInclude.Include.CUSTOM,
+      valueFilter = NullableNonemptyFilter.class
+  )
+  @JsonProperty("language")
+  private Optional<String> _getLanguage() {
+    return language;
+  }
+
   @java.lang.Override
   public boolean equals(Object other) {
     if (this == other) return true;
@@ -130,12 +153,12 @@ public final class BrandProfile {
   }
 
   private boolean equalTo(BrandProfile other) {
-    return colors.equals(other.colors) && description.equals(other.description) && domain.equals(other.domain) && fonts.equals(other.fonts) && images.equals(other.images) && language.equals(other.language) && logos.equals(other.logos) && name.equals(other.name) && socials.equals(other.socials) && tagline.equals(other.tagline);
+    return branding.equals(other.branding) && colors.equals(other.colors) && description.equals(other.description) && domain.equals(other.domain) && fonts.equals(other.fonts) && images.equals(other.images) && language.equals(other.language) && logos.equals(other.logos) && name.equals(other.name) && socials.equals(other.socials) && tagline.equals(other.tagline);
   }
 
   @java.lang.Override
   public int hashCode() {
-    return Objects.hash(this.colors, this.description, this.domain, this.fonts, this.images, this.language, this.logos, this.name, this.socials, this.tagline);
+    return Objects.hash(this.branding, this.colors, this.description, this.domain, this.fonts, this.images, this.language, this.logos, this.name, this.socials, this.tagline);
   }
 
   @java.lang.Override
@@ -164,6 +187,10 @@ public final class BrandProfile {
 
     _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+    _FinalStage branding(Optional<BrandDesignSystem> branding);
+
+    _FinalStage branding(BrandDesignSystem branding);
+
     _FinalStage colors(List<BrandProfileColorsItem> colors);
 
     _FinalStage addColors(BrandProfileColorsItem colors);
@@ -189,6 +216,8 @@ public final class BrandProfile {
     _FinalStage language(Optional<String> language);
 
     _FinalStage language(String language);
+
+    _FinalStage language(Nullable<String> language);
 
     _FinalStage logos(List<BrandAsset> logos);
 
@@ -231,6 +260,8 @@ public final class BrandProfile {
 
     private List<BrandProfileColorsItem> colors = new ArrayList<>();
 
+    private Optional<BrandDesignSystem> branding = Optional.empty();
+
     @JsonAnySetter
     private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -239,6 +270,7 @@ public final class BrandProfile {
 
     @java.lang.Override
     public Builder from(BrandProfile other) {
+      branding(other.getBranding());
       colors(other.getColors());
       description(other.getDescription());
       domain(other.getDomain());
@@ -332,6 +364,20 @@ public final class BrandProfile {
       this.logos.clear();
       if (logos != null) {
         this.logos.addAll(logos);
+      }
+      return this;
+    }
+
+    @java.lang.Override
+    public _FinalStage language(Nullable<String> language) {
+      if (language.isNull()) {
+        this.language = null;
+      }
+      else if (language.isEmpty()) {
+        this.language = Optional.empty();
+      }
+      else {
+        this.language = Optional.of(language.get());
       }
       return this;
     }
@@ -450,8 +496,24 @@ public final class BrandProfile {
     }
 
     @java.lang.Override
+    public _FinalStage branding(BrandDesignSystem branding) {
+      this.branding = Optional.ofNullable(branding);
+      return this;
+    }
+
+    @java.lang.Override
+    @JsonSetter(
+        value = "branding",
+        nulls = Nulls.SKIP
+    )
+    public _FinalStage branding(Optional<BrandDesignSystem> branding) {
+      this.branding = branding;
+      return this;
+    }
+
+    @java.lang.Override
     public BrandProfile build() {
-      return new BrandProfile(colors, description, domain, fonts, images, language, logos, name, socials, tagline, additionalProperties);
+      return new BrandProfile(branding, colors, description, domain, fonts, images, language, logos, name, socials, tagline, additionalProperties);
     }
 
     @java.lang.Override

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.berrycrawl</groupId>
   <artifactId>berrycrawl</artifactId>
-  <version>0.1.2</version>
+  <version>0.2.0</version>
   <name>Berrycrawl Java SDK</name>
   <description>Official Java SDK for the Berrycrawl API</description>
   <url>https://github.com/strawberry-labs/berrycrawl-java</url>

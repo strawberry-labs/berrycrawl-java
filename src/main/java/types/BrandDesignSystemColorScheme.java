@@ -9,14 +9,16 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.lang.Object;
 import java.lang.String;
 
-public final class SearchResponseProvider {
-  public static final SearchResponseProvider PARALLEL = new SearchResponseProvider(Value.PARALLEL, "parallel");
+public final class BrandDesignSystemColorScheme {
+  public static final BrandDesignSystemColorScheme LIGHT = new BrandDesignSystemColorScheme(Value.LIGHT, "light");
+
+  public static final BrandDesignSystemColorScheme DARK = new BrandDesignSystemColorScheme(Value.DARK, "dark");
 
   private final Value value;
 
   private final String string;
 
-  SearchResponseProvider(Value value, String string) {
+  BrandDesignSystemColorScheme(Value value, String string) {
     this.value = value;
     this.string = string;
   }
@@ -34,7 +36,7 @@ public final class SearchResponseProvider {
   @java.lang.Override
   public boolean equals(Object other) {
     return (this == other) 
-      || (other instanceof SearchResponseProvider && this.string.equals(((SearchResponseProvider) other).string));
+      || (other instanceof BrandDesignSystemColorScheme && this.string.equals(((BrandDesignSystemColorScheme) other).string));
   }
 
   @java.lang.Override
@@ -44,8 +46,10 @@ public final class SearchResponseProvider {
 
   public <T> T visit(Visitor<T> visitor) {
     switch (value) {
-      case PARALLEL:
-        return visitor.visitParallel();
+      case LIGHT:
+        return visitor.visitLight();
+      case DARK:
+        return visitor.visitDark();
       case UNKNOWN:
       default:
         return visitor.visitUnknown(string);
@@ -55,23 +59,29 @@ public final class SearchResponseProvider {
   @JsonCreator(
       mode = JsonCreator.Mode.DELEGATING
   )
-  public static SearchResponseProvider valueOf(String value) {
+  public static BrandDesignSystemColorScheme valueOf(String value) {
     switch (value) {
-      case "parallel":
-        return PARALLEL;
+      case "light":
+        return LIGHT;
+      case "dark":
+        return DARK;
       default:
-        return new SearchResponseProvider(Value.UNKNOWN, value);
+        return new BrandDesignSystemColorScheme(Value.UNKNOWN, value);
     }
   }
 
   public enum Value {
-    PARALLEL,
+    LIGHT,
+
+    DARK,
 
     UNKNOWN
   }
 
   public interface Visitor<T> {
-    T visitParallel();
+    T visitLight();
+
+    T visitDark();
 
     T visitUnknown(String unknownType);
   }
